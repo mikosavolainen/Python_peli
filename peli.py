@@ -42,7 +42,7 @@ class Player:
 
 sizee = random.randint(10,40)
 randomX = random.randint(0,700)
-wut is this
+
 class Enemys:
     def __init__(self):
 

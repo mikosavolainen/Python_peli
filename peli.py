@@ -33,10 +33,7 @@ class Player:
 
     def ammus(self):
           Screen.blit(ammus_updated, (self.xpos,self.ypos))
-          while True:
-            for bullet in bullets:
-                if bullet.x < 500 and bullet.x > 0:
-                    bullet.x += bullet.vel
+
 
 
 
@@ -66,26 +63,26 @@ Player.create_player()
 bullets = []
 while Running:
     Screen.fill((0,0,0))
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+    tapahtuma = pygame.event.poll()
+    if tapahtuma.type == pygame.QUIT:
             Running = False
 
        
 
-        keys = pygame.key.get_pressed()
+    keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_DOWN]: 
-                Player.ypos += 20
-        if keys[pygame.K_UP]: 
-                Player.ypos -= 20
-        if keys[pygame.K_LEFT]:    
-                Player.xpos -= 20
-        if keys[pygame.K_RIGHT]:
-                Player.xpos += 20
-        if keys[pygame.K_SPACE]:
-                Player.ammus()
+    if keys[pygame.K_DOWN]: 
+            Player.ypos += 5
+    if keys[pygame.K_UP]: 
+            Player.ypos -= 5
+    if keys[pygame.K_LEFT]:    
+            Player.xpos -= 5
+    if keys[pygame.K_RIGHT]:
+            Player.xpos += 5
+    if keys[pygame.K_SPACE]:
+            Player.ammus()
 
-        if event.type == SPAWNENEMY:
+    if tapahtuma.type == SPAWNENEMY:
             Enemys.create_enemy()
 
     Player.draw()  

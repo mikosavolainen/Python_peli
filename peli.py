@@ -13,8 +13,8 @@ ammus_img = pygame.image.load('ammus.png')
 ammus_updated = pygame.transform.scale(ammus_img, (200, 200))
 
 enemy_list = []
-otokka_img = pygame.image.load('otokka.png')  # Käytä otokka.png-kuvaa
-otokka_updated = pygame.transform.scale(otokka_img, (200, 200))  # Muuta kuvan kokoa tarvittaessa
+otokka_img = pygame.image.load('otokka.png')
+otokka_updated = pygame.transform.scale(otokka_img, (200, 200))
 SPAWNENEMY = pygame.USEREVENT
 pygame.time.set_timer(SPAWNENEMY, 1000)
 
@@ -57,14 +57,19 @@ class Bullet:
 class Enemy:
     def __init__(self):
         self.size = random.randint(10, 40)
+        self.ypos = 0  
 
     def create_enemy(self):
         Enemy = pygame.Rect(random.randint(100, 700), 0, self.size, self.size)
         enemy_list.append(Enemy)
 
+    def move(self):
+        for e in enemy_list:
+            e.y += 3 
+
     def draw(self):
         for e in enemy_list:
-            Screen.blit(otokka_updated, (e.x, e.y))  # Piirrä otokka.png vihollisten tilalle
+            Screen.blit(otokka_updated, (e.x, e.y))
 
 player = Player()
 enemys = Enemy()
@@ -75,7 +80,7 @@ bullets = []
 while Running:
     Screen.fill((255, 255, 255))
     tapahtuma = pygame.event.poll()
-    
+
     if tapahtuma.type == pygame.QUIT:
         Running = False
 
@@ -96,6 +101,8 @@ while Running:
 
     if tapahtuma.type == SPAWNENEMY:
         enemys.create_enemy()
+    
+    enemys.move()  # Move enemies downward
 
     player.draw()
     enemys.draw()

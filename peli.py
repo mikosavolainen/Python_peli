@@ -8,11 +8,11 @@ pygame.init()
 # Pelin asetukset
 leveys = 1200
 korkeus = 1000
-ruudun_koko = 32
+ruudun_koko = 60
 taustavari = (255, 255, 255)
-pelaajan_nopeus = 1
-vihollisten_nopeus = 1
-ammus_nopeus = 2
+pelaajan_nopeus = 3
+vihollisten_nopeus = 3
+ammus_nopeus = 4
 pelaajan_elamapisteet = 100
 pisteet = 0
 
@@ -45,13 +45,19 @@ ammus_koko = 7
 # Fontti pistenäytölle
 fontti = pygame.font.Font(None, 36)
 
+# Lisää pelin päivitysnopeuden rajoitus
+kello = pygame.time.Clock()
+FPS = 60  # Haluttu päivitysnopeus
+
 # Pelin pääsilmukka
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            ammukset.append([pelaaja_x + ruudun_koko // 2 + 65, pelaaja_y + 60]) 
+  
     # Pelaajan liikkuminen
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT] and pelaaja_x > 0:
@@ -62,12 +68,9 @@ while True:
         pelaaja_y -= pelaajan_nopeus
     if keys[pygame.K_DOWN] and pelaaja_y < korkeus - ruudun_koko:
         pelaaja_y += pelaajan_nopeus
-    if keys[pygame.K_SPACE]:
-        ammukset.append([pelaaja_x + ruudun_koko // 2, pelaaja_y])
     if keys[pygame.K_ESCAPE]:
         pygame.quit()
         sys.exit()
-
     # Luo uusi vihollinen
     if vihollinen_aika == 0:
         vihollinen_x = random.randint(0, leveys - ruudun_koko)
@@ -85,7 +88,9 @@ while True:
     # Tarkista osumat
     for ammus in ammukset:
         for vihollinen in viholliset:
-            if vihollinen[0] < ammus[0] < vihollinen[0] + ruudun_koko and vihollinen[1] < ammus[1] < vihollinen[1] + ruudun_koko:
+            if vihollinen[0] < ammus[0] + ammus_koko // 2 < vihollinen[0] + ruudun_koko and vihollinen[1] < ammus[1] + ammus_koko // 2 < vihollinen[1] + ruudun_koko:
+
+
                 ammukset.remove(ammus)
                 viholliset.remove(vihollinen)
                 pisteet += 5
@@ -121,3 +126,6 @@ while True:
     naytto.blit(pisteet_teksti, (10, 50))
 
     pygame.display.update()
+
+    # Rajoita päivitysnopeus
+    kello.tick(FPS)

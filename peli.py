@@ -67,6 +67,23 @@ def kuolit():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
                 return True  # Aloita uusi peli
 
+def aloitusruutu():
+    naytto.fill((255, 255, 255))  # Taustaväri aloitusruudulle
+
+    aloita_peli_teksti = fontti.render("Paina R aloittaaksesi pelin", True, (0, 0, 0))
+    ohje_teksti = fontti.render("Liiku nuolinäppäimillä ja ammu välilyönnillä.", True, (0, 0, 0))
+
+    naytto.blit(aloita_peli_teksti, (leveys // 2 - 200, korkeus // 2 - 50))
+    naytto.blit(ohje_teksti, (leveys // 2 - 180, korkeus // 2 + 50))
+
+    pygame.display.update()
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
+                return
+aloitusruutu()
+
 game_over = False
 
 while True:

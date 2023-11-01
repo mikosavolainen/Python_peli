@@ -9,7 +9,7 @@ korkeus = 1000
 ruudun_koko = 60
 taustavari = (255, 255, 255)
 pelaajan_nopeus = 4
-vihollisten_nopeus = 3
+vihollisten_nopeus = 4
 ammus_nopeus = 8
 pelaajan_elamapisteet = 100
 pisteet = 0
@@ -97,7 +97,7 @@ while True:
     if vihollinen_aika > 0:
         vihollinen_aika -= 1
 
-    naytto.fill(taustavari)
+    naytto.fill(taustavari)  
 
 
     if debug_mode:

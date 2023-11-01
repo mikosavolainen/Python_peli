@@ -14,7 +14,7 @@ leveys, korkeus = naytto.get_size()
 
 ruudun_koko = 60
 taustavari = (255, 255, 255)
-pelaajan_nopeus = 4
+pelaajan_nopeus = 6
 vihollisten_nopeus = 4
 ammus_nopeus = 8
 pelaajan_elamapisteet = 100
@@ -65,7 +65,7 @@ def kuolit():
     while True:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
-                return True  # Aloita uusi peli
+                return True
 
 def aloitusruutu():
     naytto.fill((255, 255, 255))  # Taustaväri aloitusruudulle
@@ -148,6 +148,7 @@ while True:
     for vihollinen in viholliset:
         if vihollinen[0] < pelaaja_x < vihollinen[0] + 60 and vihollinen[1] + 60 > pelaaja_y:
             pelaajan_elamapisteet -= 10
+            viholliset.remove(vihollinen)
             if pelaajan_elamapisteet == 0:
                 game_over = True
 

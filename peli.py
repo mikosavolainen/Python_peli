@@ -2,6 +2,7 @@ import pygame
 import sys
 import random
 
+
 pygame.init()
 
 leveys = 1200
@@ -17,7 +18,7 @@ pelaajan_nopeus = 4
 vihollisten_nopeus = 4
 ammus_nopeus = 8
 pelaajan_elamapisteet = 100
-pisteet = 0
+pisteet = 10
 
 pelaaja_kuva = pygame.image.load("pelaaja.png")
 pelaaja_kuva = pygame.transform.scale(pelaaja_kuva, (int(ruudun_koko * 0.45), int(ruudun_koko * 0.95)))
@@ -49,6 +50,25 @@ FPS = 60
 
 debug_mode = False
 
+def kuolit():
+    naytto.fill((0, 0, 0))  # Taustaväri kuolinruudulle
+
+    game_over_teksti = fontti.render("Peli päättyi", True, (255, 255, 255))
+    aloita_uusi_peli_teksti = fontti.render("Paina R aloittaaksesi uuden pelin", True, (255, 255, 255))
+
+    naytto.blit(game_over_teksti, (leveys // 2 - 100, korkeus // 2 - 50))
+    naytto.blit(aloita_uusi_peli_teksti, (leveys // 2 - 200, korkeus // 2 + 50))
+
+    pygame.display.update()
+
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
+                return True  # Aloita uusi peli
+
+game_over = False
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -78,6 +98,24 @@ while True:
         vihollinen_aika = 100
 
     for vihollinen in viholliset:
+        if vihollinen[1] > korkeus - ruudun_koko:
+            pisteet -= 15
+            viholliset.remove(vihollinen)
+
+    if pelaajan_elamapisteet <= 0 or pisteet <= 0:
+        game_over = True
+
+    if game_over:
+        if kuolit():
+            game_over = False
+            pelaajan_elamapisteet = 100
+            pisteet = 10
+            pelaaja_x = leveys // 2 - ruudun_koko // 2
+            pelaaja_y = korkeus - ruudun_koko * 2
+            viholliset = []
+            ammukset = []
+
+    for vihollinen in viholliset:
         vihollinen[1] += vihollisten_nopeus
 
     for ammus in ammukset:
@@ -94,9 +132,7 @@ while True:
         if vihollinen[0] < pelaaja_x < vihollinen[0] + 60 and vihollinen[1] + 60 > pelaaja_y:
             pelaajan_elamapisteet -= 10
             if pelaajan_elamapisteet == 0:
-                pygame.quit()
-                sys.exit()
-            viholliset.remove(vihollinen)
+                game_over = True
 
     viholliset = [vihollinen for vihollinen in viholliset if vihollinen[1] < korkeus]
 
@@ -106,20 +142,18 @@ while True:
     naytto.blit(taustakuva, (0, 0))
 
     if debug_mode:
-      pygame.draw.rect(naytto, (0, 0, 255), (pelaaja_x, pelaaja_y, int(ruudun_koko * 0.45), int(ruudun_koko * 0.95)))
+        pygame.draw.rect(naytto, (0, 0, 255), (pelaaja_x, pelaaja_y, int(ruudun_koko * 0.45), int(ruudun_koko * 0.95)))
     else:
         naytto.blit(pelaaja_kuva, (pelaaja_x, pelaaja_y))
 
     for vihollinen in viholliset:
         if debug_mode:
-            #pygame.draw.rect(naytto, (255, 0, 0), (vihollinen[0], vihollinen[1], ruudun_koko, ruudun_koko, 2))
             pygame.draw.rect(naytto, (255, 0, 0), (vihollinen[0], vihollinen[1], int(ruudun_koko * 0.45), int(ruudun_koko * 0.95)))
         else:
             naytto.blit(vihollinen_kuva, (vihollinen[0], vihollinen[1]))
 
     for ammus in ammukset:
         if debug_mode:
-            #pygame.draw.rect(naytto, (0, 255, 0), (ammus[0], ammus[1], ammus_koko, ammus_koko, 2))
             pygame.draw.rect(naytto, (0, 255, 0), (ammus[0], ammus[1], int(ammus_koko * 0.45), int(ammus_koko * 0.95)))
         else:
             pygame.draw.circle(naytto, ammus_vari, (int(ammus[0]), int(ammus[1])), ammus_koko)

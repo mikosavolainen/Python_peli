@@ -18,7 +18,7 @@ pelaajan_nopeus = 6
 vihollisten_nopeus = 4
 ammus_nopeus = 8
 pelaajan_elamapisteet = 100
-pisteet = 10
+pisteet = 20
 
 pelaaja_kuva = pygame.image.load("pelaaja.png")
 pelaaja_kuva = pygame.transform.scale(pelaaja_kuva, (int(ruudun_koko * 0.45), int(ruudun_koko * 0.95)))
@@ -66,15 +66,20 @@ def kuolit():
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
                 return True
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                sys.exit()
 
 def aloitusruutu():
     naytto.fill((255, 255, 255))  # Taustaväri aloitusruudulle
 
     aloita_peli_teksti = fontti.render("Paina R aloittaaksesi pelin", True, (0, 0, 0))
     ohje_teksti = fontti.render("Liiku nuolinäppäimillä ja ammu välilyönnillä.", True, (0, 0, 0))
+    ohje_teksti2 = fontti.render("Saat alkuunsa 20 Pistettä ja 100 Elämä pistettä", True, (0, 0, 0))
 
     naytto.blit(aloita_peli_teksti, (leveys // 2 - 200, korkeus // 2 - 50))
-    naytto.blit(ohje_teksti, (leveys // 2 - 180, korkeus // 2 + 50))
+    naytto.blit(ohje_teksti, (leveys // 2 - 300, korkeus // 2 + 50))
+    naytto.blit(ohje_teksti2, (leveys // 2 - 300, korkeus // 2 + 100))
 
     pygame.display.update()
 
@@ -82,6 +87,9 @@ def aloitusruutu():
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
                 return
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                sys.exit()
 aloitusruutu()
 
 game_over = False
